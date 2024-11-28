@@ -1,0 +1,46 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./scripts/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+    environment:
+      POSTGRES_USER: engineer
+      POSTGRES_PASSWORD: examplepass
+      POSTGRES_DB: aeromexico
+    ports:
+      - 54321:5432
+    networks:
+      - postgres
+  etl:
+    build:  
+      context: .    
+      dockerfile: DockerfileEtl
+    depends_on:
+      db:
+        condition: service_started        
+    entrypoint:
+      - /etl/execute_etl.sh      
+    networks:
+      - postgres
+  api:
+    build:  
+      context: .    
+      dockerfile: DockerfileApi
+    depends_on:
+      etl:
+        condition: service_started        
+    entrypoint:
+      - flask
+      - run
+      - --host=0.0.0.0
+      - --port=80
+    ports:
+      - 8080:80
+    networks:
+      - postgres
+networks:
+  postgres:
+    driver: bridge

@@ -1,0 +1,16 @@
+# Pull base image
+FROM python:3.10
+
+#Copy files 
+WORKDIR /
+
+COPY etl/ /etl/
+COPY scripts/execute_etl.sh /etl/execute_etl.sh
+
+#Install libs
+RUN pip install --upgrade pip && \
+    pip install virtualenv
+
+#add execute permissions 
+RUN chmod +x /etl/execute_etl.sh
+
