@@ -11,33 +11,20 @@ services:
       POSTGRES_PASSWORD: examplepass
       POSTGRES_DB: aeromexico
     ports:
-      - 54321:5432
+      - 54322:5432
     networks:
       - postgres
-  etl:
+  tests:
     build:  
       context: .    
-      dockerfile: DockerfileEtl
+      dockerfile: DockerfileTests
     depends_on:
       db:
         condition: service_started        
     entrypoint:
-      - /etl/execute_etl.sh      
+      - /src/execute_tests.sh      
     networks:
-      - postgres
-  api:
-    build:  
-      context: .    
-      dockerfile: DockerfileApi
-    depends_on:
-      etl:
-        condition: service_started        
-    entrypoint:
-      - /api/execute_api.sh
-    ports:
-      - 8080:8080
-    networks:
-      - postgres
+      - postgres  
 networks:
   postgres:
     driver: bridge

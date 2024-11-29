@@ -1,0 +1,9 @@
+etl/.venv
+api/.venv
+.git
+api/__pycache__
+etl/__pycache__
+tests/__pycache__
+tests/.pytest_cache
+*.pyc
+tests/.venv

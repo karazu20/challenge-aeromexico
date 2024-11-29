@@ -1,0 +1,7 @@
+pytest
+Flask
+Flask-RESTful
+psycopg2
+sqlalchemy
+pandas
+

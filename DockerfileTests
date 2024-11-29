@@ -1,0 +1,19 @@
+# Pull base image
+
+FROM python:3.10 as build
+
+WORKDIR /
+
+COPY api/ /src/api/
+COPY etl/ /src/etl/
+COPY tests/ /src/tests/
+
+#Install libs
+RUN pip install --upgrade pip && \
+    pip install virtualenv
+
+
+COPY scripts/execute_tests.sh /src/execute_tests.sh
+
+#add execute permissions 
+RUN chmod +x /src/execute_tests.sh
